@@ -33,20 +33,17 @@ class CustomImageWriteParam extends JPEGImageWriteParam {
  */
 public class ResizeImage {
     private BufferedImage source;
-    private File fileDestination;
 
-    public ResizeImage(BufferedImage source, File fileDestination) {
+    public ResizeImage(BufferedImage source) {
         this.source = source;
-        this.fileDestination = fileDestination;
     }
 
-    public ResizeImage(File source, File fileDestination) throws IOException {
+    public ResizeImage(File source) throws IOException {
         this.source = ImageIO.read(source);
-        this.fileDestination = fileDestination;
     }
 
-    public void doResize() throws IOException {
-        ResampleOp resampleOp = new ResampleOp(176, 132);
+    public void doResize(int width, int height, File fileDestination) throws IOException {
+        ResampleOp resampleOp = new ResampleOp(width, height);
         BufferedImage rescaled = resampleOp.filter(source, null);
 
         // Find a jpeg writer

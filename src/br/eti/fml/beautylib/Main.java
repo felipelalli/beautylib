@@ -9,7 +9,9 @@ import java.io.IOException;
  */
 public class Main {
     public static void main(String[] args) throws IOException {
-        ResizeImage ri = new ResizeImage(new File("db/a.jpg"), new File("db/b.jpg"));
-        ri.doResize();
+        ResizeImage ri = new ResizeImage(new File("db/a.jpg"));
+        ri.doResize(176, 132, new File("db/b.jpg"));
+        ri.doResize(176*2, 132*2, new File("db/c.jpg"));
+        ri.doResize(176*5, 132*5, new File("db/d.jpg"));
     }
 }
