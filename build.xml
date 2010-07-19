@@ -1,0 +1,243 @@
+<!--
+	ANT Build file
+	FML Jul/2010 (c) All rights reserved.
+        
+        Procure por "ALTERAR"
+-->    
+
+<project name="BeautyLib" default="help" basedir="."> <!-- ALTERAR -->
+
+    <description>
+            ANT Build file.
+    </description>
+
+    <tstamp/>
+
+    <!-- ALTERAR -->
+    <property name="versao" value="1.0-beta"/>
+    <property name="projeto" value="beautylib"/>
+    <property name="nome.simples" value="beautylib"/>
+    <property name="empresa" value="FML"/>
+    <property name="with.debug" value="true"/> <!-- "off" or "true" -->
+    
+    <!-- ALTERAR -->
+    <property name="pacote" value="br.eti.fml.beautylib"/>
+    <property name="principal" value="${pacote}.Main"/>
+    <property name="nome.arquivo" value="${nome.simples}-${versao}"/>
+    <property name="nome.arquivo.stamp" value="${nome.arquivo}-${DSTAMP}-${TSTAMP}"/>
+
+    <property name="base" value="."/>
+    <property name="src" value="src"/>
+    <property name="jars" value="jars"/>
+    <property name="deploy" value="deploy"/>
+    <property name="deploy.jars" value="deploy/jars"/>
+    <property name="classes" value="deploy/classes"/>
+    <property name="arquivo" value="deploy/arquivo"/>
+    <property name="release" value="deploy/release"/>
+    <property name="doc" value="doc/api/javadoc"/>
+    <property name="tempdir" value="temp"/>
+    <property name="lib" value="lib/jar"/>
+    <property name="lib2" value="lib"/>
+    <property name="bin" value="bin"/>
+    <property name="etc" value="etc"/>
+    <property name="prj" value="prj"/>
+    <property name="etc.doc" value="${etc}/doc"/>
+    <property name="etc.deploy" value="${etc}/deploy"/>
+    <property name="dll.dst" value="${deploy}"/>
+
+    <!-- ALTERAR -->
+    <property name="classpath" value="${deploy}/classes;.;${lib};${lib}/ij.jar"/>
+    <property name="classpath.jar" value="${nome.arquivo}.jar ij.jar"/> <!-- separado por espaço -->
+
+    <target name="init">
+        <!--
+            <splash imageurl="http://img61.imageshack.us/img61/129/01empilhadeirarh2.jpg"/>
+         -->        
+    </target>
+        
+    <target name="help">
+            <echo message="Try with -projecthelp for help."/>
+    </target>
+
+    <target name="clean" depends="init" description="Delete compiled classes.">
+        <delete dir="${classes}"/>
+        <delete dir="${classes.teste}"/>
+        <delete dir="${tempdir}"/>
+    </target>
+
+    <target name="clean.all" depends="init"
+                    description="Clean all that can have been created.">
+        <delete dir="${deploy}"/>
+        <delete dir="${doc}"/>
+        <mkdir dir="${deploy}"/>
+    </target>
+    
+    <target name="run" depends="compile"
+            description="Run the project">
+            <echo message="Start of project..."/>
+            <java fork="true" jar="${deploy.jars}/${nome.arquivo}.jar"
+                            classpath="${classpath}">
+                <jvmarg value="-XX:+AggressiveHeap"/>
+            </java>
+
+            <echo message="End of project..."/>
+    </target>
+    
+    <target name="run-serverlock" depends="compile"
+            description="Run the server lock application">
+            <java fork="true" jar="${deploy.jars}/${nome.arquivo}.jar"
+                            classpath="${classpath}">
+                <arg value="sdfjhoiwequweoiixcns"/>
+            </java>
+    </target>    
+
+    <target name="compile" depends="init" description="Compile the project.">		
+            <mkdir dir="${deploy}"/>
+            <mkdir dir="${deploy.jars}"/>
+            <mkdir dir="${classes}"/>
+
+            <javac srcdir="${src}" classpath="${classpath}" destdir="${classes}"
+                            debug="${with.debug}" nowarn="true">
+                    <compilerarg value="-Xlint"/> 
+            </javac>
+
+            <!-- ${src} É copiado para ${classes} (exceto *.java) -->
+            <copy todir="${classes}" overwrite="true">
+                    <fileset dir="${src}">
+                            <exclude name="**/*.java"/>
+                    </fileset>
+            </copy>
+
+            <jar jarfile="${deploy.jars}/${nome.arquivo}.jar" basedir="${classes}">
+                <!-- excludes="**/**Teste**" -->
+                <manifest>
+                    <attribute name="Built-By" value="${empresa}"/>
+                    <attribute name="Main-Class" value="${principal}"/>
+                    <attribute name="Class-Path" value="${classpath.jar}"/>
+                </manifest>
+            </jar>
+
+            <!-- Todo o conteúdo de lib/jar é copiado para a raiz do deploy -->
+            <copy todir="${deploy.jars}" overwrite="true" failonerror="no">
+                    <fileset dir="${lib}">
+                            <include name="*.jar"/>
+                    </fileset>
+            </copy>          
+  
+            <!-- Todo o conteúdo de bin é copiado para a raiz do deploy -->
+            <copy todir="${deploy}" overwrite="true" failonerror="false">
+                    <fileset dir="${bin}">
+                            <include name="*.*"/>
+                    </fileset>
+            </copy>
+
+            <!-- Todo o conteúdo de etc/deploy é copiado para a raiz do deploy -->
+            <copy todir="${deploy}" overwrite="true" failonerror="false">
+                    <fileset dir="${etc.deploy}">
+                            <exclude name="**/leiame.txt"/>
+                    </fileset>
+            </copy>
+            
+            <!-- Todo o conteúdo de etc/deploy é copiado para a raiz do projeto -->
+            <copy todir="${base}" overwrite="true" failonerror="false">
+                    <fileset dir="${etc.deploy}">
+                            <exclude name="**/leiame.txt"/>
+                    </fileset>
+            </copy>
+            
+            <!-- Todos os arquivos de configuração da raiz são copiados pro deploy -->
+            <copy todir="${deploy}" overwrite="true" failonerror="false">
+                    <fileset dir="${base}">
+                            <include name="config.xml" />
+                    </fileset>
+            </copy>            
+
+    </target>
+	
+    <target name="compile.all" depends="clean,compile"
+            description="Clean and after compile the project (maybe slow)." />
+    
+    <target name="document" depends="compile" description="Make the project API.">
+        <!--<delete dir="${doc}"/>-->
+        <mkdir dir="${doc}"/>
+        <javadoc sourcepath="${src}" destdir="${doc}" classpath="${classpath}"
+                author="true" version="true" use="true"
+                packagenames="*" doctitle="${projeto} ${versao} API"
+                charset="UTF-8"
+                overview="${etc.doc}/cover.html"
+                windowtitle="${projeto} ${versao} API" />
+
+        <!-- Todo o conteúdo de etc/doc é copiado para a raiz do javadoc -->
+        <copy todir="${doc}" overwrite="true">			
+                <fileset dir="${etc.doc}">
+                        <exclude name="**/leiame.txt"/>
+                </fileset>
+        </copy>
+    </target>
+
+    <target name="release" depends="compile"
+                    description="Make a release, without archive. Use 'dist' instead this.">
+            <delete dir="${release}"/>
+            <mkdir dir="${release}"/>
+            <mkdir dir="${release}/${jars}"/>
+
+            <copy file="${deploy.jars}/${nome.arquivo}.jar"
+                tofile="${release}/${jars}/${nome.arquivo}.jar"/>
+            
+            <!-- Todo o conteúdo de bin é copiado para a raiz do release -->
+            <copy todir="${release}" overwrite="true" failonerror="false">
+                    <fileset dir="${bin}">
+                            <include name="*.*"/>
+                    </fileset>
+            </copy>
+
+            <!-- Todas as DLL de bin são copiadas para a raiz do projeto também -->
+            <copy todir="${release}" overwrite="true" failonerror="false">
+                    <fileset dir="${bin}">
+                            <include name="**/*.dll"/>
+                            <exclude name="**/leiame.txt"/>
+                    </fileset>
+            </copy>
+            
+            <!-- Todo o conteúdo de etc/deploy é copiado para a raiz do release -->
+            <copy todir="${release}" overwrite="true">
+                    <fileset dir="${etc.deploy}">
+                            <exclude name="**/leiame.txt"/>
+                    </fileset>
+            </copy>
+
+            <checksum file="${release}/${jars}/${nome.arquivo}.jar"/>
+
+            <copy todir="${release}/${jars}">
+                    <fileset dir="${lib}"/>
+            </copy>
+
+    </target>
+
+    <target name="archive" depends="release"
+                    description="Archive the release. Use 'dist' instead of this.">
+            <mkdir dir="${arquivo}"/>
+
+            <zip zipfile="${arquivo}/${nome.arquivo.stamp}.zip"
+                     basedir="${release}"
+                     comment="${projeto} ${versao} - Related of ${nome.arquivo.stamp}."
+            />
+
+            <checksum file="${arquivo}/${nome.arquivo.stamp}.zip"/>
+    </target>
+
+    <target name="dist" depends="release,archive"
+			description="Make a new distribution."/>
+
+    <target name="zip.all" depends="release"
+                    description="Zip all project on temp, except the deploy/arquivo.">
+            <mkdir dir="${tempdir}"/>
+
+            <zip zipfile="${tempdir}/${nome.arquivo.stamp}-all.zip"
+                     basedir="."
+                     excludes="deploy/arquivo/**, temp/**"
+                     comment="${projeto} ${versao} - All ziped project, with source and build.xml"/>
+
+    </target>
+
+</project>
