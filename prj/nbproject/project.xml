@@ -74,7 +74,7 @@
         <java-data xmlns="http://www.netbeans.org/ns/freeform-project-java/1">
             <compilation-unit>
                 <package-root>/home/felipelalli/wa/fml/beautylib/src</package-root>
-                <classpath mode="compile">../lib/jar/ij.jar:../deploy/classes</classpath>
+                <classpath mode="compile">../lib/jar/ij.jar:../lib/jar/java-image-scaling-0.8.4.jar</classpath>
                 <source-level>1.5</source-level>
             </compilation-unit>
         </java-data>
