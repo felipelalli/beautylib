@@ -46,8 +46,8 @@
     <property name="dll.dst" value="${deploy}"/>
 
     <!-- ALTERAR -->
-    <property name="classpath" value="${deploy}/classes;.;${lib};${lib}/ij.jar;${lib}/java-image-scaling-0.8.4.jar"/>
-    <property name="classpath.jar" value="${nome.arquivo}.jar ij.jar java-image-scaling-0.8.4.jar"/> <!-- separado por espaço -->
+    <property name="classpath" value="${deploy}/classes;.;${lib};${lib}/java-image-scaling-0.8.4.jar"/>
+    <property name="classpath.jar" value="${nome.arquivo}.jar java-image-scaling-0.8.4.jar"/> <!-- separado por espaço -->
 
     <target name="init">
         <!--
