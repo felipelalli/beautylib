@@ -14,7 +14,7 @@
     <tstamp/>
 
     <!-- ALTERAR -->
-    <property name="versao" value="1.0-beta"/>
+    <property name="versao" value="2.1-beta"/>
     <property name="projeto" value="beautylib"/>
     <property name="nome.simples" value="beautylib"/>
     <property name="empresa" value="FML"/>

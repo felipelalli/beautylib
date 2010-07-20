@@ -1,6 +1,7 @@
 package br.eti.fml.beautylib;
 
-import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 /**
@@ -9,9 +10,9 @@ import java.io.IOException;
  */
 public class Main {
     public static void main(String[] args) throws IOException {
-        ResizeImage ri = new ResizeImage(new File("db/a.jpg"));
-        ri.doResize(176, 132, new File("db/b.jpg"));
-        ri.doResize(176*2, 132*2, new File("db/c.jpg"));
-        ri.doResize(176*5, 132*5, new File("db/d.jpg"));
+        ResizeImage ri = new ResizeImage(new FileInputStream("db/a.jpg"));
+        ri.doResize(176, 132, new FileOutputStream("db/b.jpg"));
+        ri.doResize(176*2, 132*2, new FileOutputStream("db/c.jpg"));
+        ri.doResize(176*5, 132*5, new FileOutputStream("db/d.jpg"));
     }
 }
