@@ -168,7 +168,7 @@
                 windowtitle="${projeto} ${versao} API" />
 
         <!-- Todo o conteúdo de etc/doc é copiado para a raiz do javadoc -->
-        <copy todir="${doc}" overwrite="true">			
+        <copy todir="${doc}" overwrite="true" failonerror="false">
                 <fileset dir="${etc.doc}">
                         <exclude name="**/leiame.txt"/>
                 </fileset>
