@@ -14,7 +14,7 @@
     <tstamp/>
 
     <!-- ALTERAR -->
-    <property name="versao" value="2.1-beta"/>
+    <property name="versao" value="2.2-beta"/>
     <property name="projeto" value="beautylib"/>
     <property name="nome.simples" value="beautylib"/>
     <property name="empresa" value="FML"/>
@@ -200,7 +200,7 @@
             </copy>
             
             <!-- Todo o conteúdo de etc/deploy é copiado para a raiz do release -->
-            <copy todir="${release}" overwrite="true">
+            <copy todir="${release}" overwrite="true" failonerror="false">
                     <fileset dir="${etc.deploy}">
                             <exclude name="**/leiame.txt"/>
                     </fileset>
